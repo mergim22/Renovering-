@@ -12,6 +12,7 @@
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif}
 .wrap{max-width:640px;margin:0 auto;padding:16px}
 h1{font-size:22px;margin:4px 0 12px}
+  .logo{display:block;width:100%;max-width:260px;aspect-ratio:2.2/1;object-fit:cover;object-position:50% 51%;margin:0 auto 12px;border-radius:12px;background:#fff}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
 .apt{display:block;width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
@@ -77,7 +78,7 @@ function render(){
   const a=$("app");
   if(lb){a.innerHTML=`<div class="lb" id="lb"><img src="${esc(lb)}"></div>`;$("lb").onclick=()=>{lb=null;render()};return}
   if(!user){
-    a.innerHTML=`<h1>Renoveringsstatus</h1><div class="card"><input id="em" type="email" placeholder="E-post" autocomplete="username"><input id="pw" type="password" placeholder="Lösenord" autocomplete="current-password"><button class="btn" id="li" style="width:100%">Logga in</button></div>`;
+    a.innerHTML=`<img class="logo" src="IMG_8028.jpeg" alt="Kristianstad Bygg & Måleri"><h1>Renoveringsstatus</h1><div class="card"><input id="em" type="email" placeholder="E-post" autocomplete="username"><input id="pw" type="password" placeholder="Lösenord" autocomplete="current-password"><button class="btn" id="li" style="width:100%">Logga in</button></div>`;
     const go=async()=>{const {error}=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});if(error)toast("Fel e-post eller lösenord")};
     $("li").onclick=go;$("pw").onkeydown=e=>{if(e.key==="Enter")go()};return;
   }
@@ -107,7 +108,7 @@ function render(){
     return;
   }
   const sorted=[...apts].sort((x,y)=>doneCount(x.id)-doneCount(y.id));
-  a.innerHTML=`<div class="row"><h1>Lägenheter</h1><button class="me" id="me">${me?"👤 "+esc(me):"Ange ditt namn"}</button></div>
+  a.innerHTML=`<img class="logo" src="IMG_8028.jpeg" alt=""><div class="row"><h1>Lägenheter</h1><button class="me" id="me">${me?"👤 "+esc(me):"Ange ditt namn"}</button></div>
   ${adding?`<div class="card"><input id="nm" placeholder="Adress / lägenhet, t.ex. Storgatan 4, lgh 1102"><div class="row"><button class="btn g" id="cx">Avbryt</button><button class="btn" id="sv">Lägg till</button></div></div>`:`<button class="btn" id="add" style="width:100%;margin-bottom:12px">+ Ny lägenhet</button>`}
   ${!loaded?'<div class="empty">Laddar…</div>':sorted.length?sorted.map(x=>{const n=doneCount(x.id),p=tasks.length?Math.round(n/tasks.length*100):0,nx=tasks.find(t=>!prog[x.id+"__"+t.id]);
     return `<button class="card apt" data-id="${x.id}"><div class="row"><b style="font-size:17px">${esc(x.name)}</b><span style="color:${p==100?"var(--ok)":"var(--mut)"};font-weight:700">${p}%</span></div><div class="sub">${nx?"Nästa: "+esc(nx.name):"✓ Allt klart"}</div><div class="bar"><i style="width:${p}%"></i></div></button>`}).join(""):'<div class="empty">Inga lägenheter ännu. Tryck på “Ny lägenhet”.</div>'}
